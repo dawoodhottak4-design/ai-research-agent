@@ -25,7 +25,7 @@ if not groq_api_key:
     st.info("💡 Please enter your Groq API Key in the sidebar or set it in Streamlit Secrets to continue.")
     st.stop()
 
-# Set environment variables for LiteLLM / CrewAI
+# Set environment variable
 os.environ["GROQ_API_KEY"] = groq_api_key
 
 # --- Custom CrewAI Tool Definition ---
@@ -52,9 +52,10 @@ if st.button("Generate Research Report", type="primary"):
     else:
         with st.spinner("Agent is searching the web and compiling the report..."):
             try:
-                # Initialize LLM with explicit Groq provider
+                # Bypass cache_breakpoint issue using Groq's OpenAI API endpoint
                 llm = LLM(
-                    model="groq/openai/gpt-oss-120b",
+                    model="openai/openai/gpt-oss-120b",
+                    base_url="https://api.groq.com/openai/v1",
                     api_key=groq_api_key,
                     temperature=0.3
                 )
@@ -77,6 +78,7 @@ if st.button("Generate Research Report", type="primary"):
                 research_task = Task(
                     description=(
                         f"1. Search the web for recent and accurate details about: {topic}.\n"
+                        f"2. Synthesize key trends, facts, statistics, and main considerations.\n"
                         f"3. Organize findings into a professional research report."
                     ),
                     expected_output=(
