@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 st.title("🔍 Single-Agent AI Researcher")
-st.write("Powered by **CrewAI**, **Groq (openai/gpt-oss-120b)**, and **DuckDuckGo**.")
+st.write("Powered by **CrewAI**, **Groq**, and **DuckDuckGo**.")
 
 # --- API Key Management ---
 groq_api_key = st.sidebar.text_input(
@@ -25,7 +25,7 @@ if not groq_api_key:
     st.info("💡 Please enter your Groq API Key in the sidebar or set it in Streamlit Secrets to continue.")
     st.stop()
 
-# Set environment variable for CrewAI LLM
+# Set environment variables for LiteLLM / CrewAI
 os.environ["GROQ_API_KEY"] = groq_api_key
 
 # --- Custom CrewAI Tool Definition ---
@@ -52,7 +52,7 @@ if st.button("Generate Research Report", type="primary"):
     else:
         with st.spinner("Agent is searching the web and compiling the report..."):
             try:
-                # Initialize LLM using CrewAI Native LLM class
+                # Initialize LLM with explicit Groq provider
                 llm = LLM(
                     model="groq/openai/gpt-oss-120b",
                     api_key=groq_api_key,
@@ -77,7 +77,6 @@ if st.button("Generate Research Report", type="primary"):
                 research_task = Task(
                     description=(
                         f"1. Search the web for recent and accurate details about: {topic}.\n"
-                        f"2. Synthesize key trends, facts, statistics, and main considerations.\n"
                         f"3. Organize findings into a professional research report."
                     ),
                     expected_output=(
