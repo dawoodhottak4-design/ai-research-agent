@@ -3,3 +3,4 @@ crewai>=0.100.0
 langchain-groq>=0.2.0
 langchain-community>=0.2.0
 duckduckgo-search>=6.0.0
+ddgs
