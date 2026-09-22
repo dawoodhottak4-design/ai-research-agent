@@ -5,8 +5,7 @@ from crewai import Agent, Task, Crew, Process, LLM
 from crewai.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 
-# --- Crucial Fix for Groq Prompt Caching Error ---
-# Unsupported parameters (like cache_breakpoint) ko auto-drop karne ke liye
+# Auto-drop unsupported parameters (like cache_breakpoint)
 litellm.drop_params = True
 
 # --- Page Configuration ---
@@ -26,7 +25,7 @@ groq_api_key = st.sidebar.text_input(
     value=st.secrets.get("GROQ_API_KEY", "") if "GROQ_API_KEY" in st.secrets else ""
 )
 
-# Model Selector Dropdown
+# Model Selection
 selected_model = st.sidebar.selectbox(
     "Select LLM Model:",
     [
@@ -43,7 +42,7 @@ if not groq_api_key:
 
 os.environ["GROQ_API_KEY"] = groq_api_key
 
-# --- Custom CrewAI Tool Definition ---
+# --- Custom Search Tool ---
 ddg_search = DuckDuckGoSearchRun()
 
 @tool("DuckDuckGo Web Search")
@@ -60,24 +59,22 @@ topic = st.text_input(
     placeholder="e.g., Latest trends in Educational Technology"
 )
 
-# --- Agent & Task Execution ---
+# --- Execution ---
 if st.button("Generate Research Report", type="primary"):
     if not topic.strip():
         st.warning("Please enter a research topic first.")
     else:
         with st.spinner("Agent is searching the web and compiling the report..."):
             try:
-                # Native CrewAI LLM Initialization
-                
+                llm = LLM(
+                    model=selected_model,
+                    api_key=groq_api_key,
+                    temperature=0.3
+                )
 
                 # 1. Define Agent
                 research_agent = Agent(
-                    rol# app.py mein LLM initialization block ko update karein:
-llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
-    api_key=groq_api_key,
-    temperature=0.3
-)e="Senior Research Analyst",
+                    role="Senior Research Analyst",
                     goal=f"Conduct thorough, up-to-date web research on '{topic}' and generate a comprehensive report.",
                     backstory=(
                         "You are an expert analyst known for extracting precise insights from the web, "
