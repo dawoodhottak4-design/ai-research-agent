@@ -57,11 +57,13 @@ if st.button("Generate Research Report", type="primary"):
 
                 # 1. Define Agent
                 research_ag# app.py mein LLM initialization block ko update karein:
+# app.py mein LLM initialization block ko update karein:
 llm = LLM(
     model="groq/llama-3.3-70b-versatile",
     api_key=groq_api_key,
     temperature=0.3
 )
+
 ent = Agent(
                     role="Senior Research Analyst",
                     goal=f"Conduct thorough, up-to-date web research on '{topic}' and generate a comprehensive report.",
