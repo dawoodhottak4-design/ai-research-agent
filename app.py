@@ -1,4 +1,3 @@
-
 import os
 import streamlit as st
 import litellm
@@ -69,15 +68,16 @@ if st.button("Generate Research Report", type="primary"):
         with st.spinner("Agent is searching the web and compiling the report..."):
             try:
                 # Native CrewAI LLM Initialization
-                llm = LLM(
-                    model=selected_model,
-                    api_key=groq_api_key,
-                    temperature=0.3
-                )
+                
 
                 # 1. Define Agent
                 research_agent = Agent(
-                    role="Senior Research Analyst",
+                    rol# app.py mein LLM initialization block ko update karein:
+llm = LLM(
+    model="groq/llama-3.3-70b-versatile",
+    api_key=groq_api_key,
+    temperature=0.3
+)e="Senior Research Analyst",
                     goal=f"Conduct thorough, up-to-date web research on '{topic}' and generate a comprehensive report.",
                     backstory=(
                         "You are an expert analyst known for extracting precise insights from the web, "
