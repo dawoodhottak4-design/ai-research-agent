@@ -21,6 +21,17 @@ groq_api_key = st.sidebar.text_input(
     value=st.secrets.get("GROQ_API_KEY", "") if "GROQ_API_KEY" in st.secrets else ""
 )
 
+# Model Selection Dropdown in Sidebar to handle Rate Limits easily
+selected_model = st.sidebar.selectbox(
+    "Select LLM Model:",
+    [
+        "groq/llama-3.3-70b-versatile",
+        "groq/llama3-70b-8192",
+        "openai/openai/gpt-oss-120b"
+    ],
+    index=0
+)
+
 if not groq_api_key:
     st.info("💡 Please enter your Groq API Key in the sidebar or set it in Streamlit Secrets to continue.")
     st.stop()
@@ -52,19 +63,23 @@ if st.button("Generate Research Report", type="primary"):
     else:
         with st.spinner("Agent is searching the web and compiling the report..."):
             try:
-                # Bypass cache_breakpoint issue using Groq's OpenAI API endpoint
-               
+                # Initialize selected model dynamically
+                if "gpt-oss-120b" in selected_model:
+                    llm = LLM(
+                        model=selected_model,
+                        base_url="https://api.groq.com/openai/v1",
+                        api_key=groq_api_key,
+                        temperature=0.3
+                    )
+                else:
+                    llm = LLM(
+                        model=selected_model,
+                        api_key=groq_api_key,
+                        temperature=0.3
+                    )
 
                 # 1. Define Agent
-                research_ag# app.py mein LLM initialization block ko update karein:
-# app.py mein LLM initialization block ko update karein:
-llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
-    api_key=groq_api_key,
-    temperature=0.3
-)
-
-ent = Agent(
+                research_agent = Agent(
                     role="Senior Research Analyst",
                     goal=f"Conduct thorough, up-to-date web research on '{topic}' and generate a comprehensive report.",
                     backstory=(
