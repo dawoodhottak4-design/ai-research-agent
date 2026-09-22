@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 st.title("🔍 Single-Agent AI Researcher")
-st.write("Powered by **CrewAI**, **Groq**, and **DuckDuckGo**.")
+st.write("Powered by **CrewAI**, **Groq Free Tier Models**, and **DuckDuckGo**.")
 
 # --- API Key Management ---
 groq_api_key = st.sidebar.text_input(
@@ -25,13 +25,13 @@ groq_api_key = st.sidebar.text_input(
     value=st.secrets.get("GROQ_API_KEY", "") if "GROQ_API_KEY" in st.secrets else ""
 )
 
-# Model Selection
+# High Limit & High Performance Free Models Selection
 selected_model = st.sidebar.selectbox(
-    "Select LLM Model:",
+    "Select High-Limit Free Model:",
     [
-        "groq/llama-3.3-70b-versatile",
-        "groq/llama3-80b-8192",
-        "groq/mixtral-8x7b-32768"
+        "groq/llama-3.3-70b-versatile",  # High-capacity Enterprise-grade free model
+        "groq/llama3-70b-8192",          # Reliable backup 70B model
+        "groq/llama-3.1-8b-instant"      # Ultra-fast with highest request limits
     ],
     index=0
 )
